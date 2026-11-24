@@ -1,0 +1,14 @@
+{
+  "name": "mv9-ecpay-shop",
+  "version": "1.0.0",
+  "description": "牛牛科技工作室 MV9 定位修改器官網 — 綠界科技 AIO 金流、B2C 電子發票自動開立與買方訂單成立 Email 通知",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "nodemailer": "^6.9.16"
+  }
+}
