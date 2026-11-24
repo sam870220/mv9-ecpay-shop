@@ -1,23 +1,15 @@
-# 牛牛科技工作室 — MV9 定位修改器官網（綠界金流 + 自動開立電子發票 + 買方通知信）
+# 牛牛科技工作室 MV9 定位修改器 — Cloudflare Workers 部署指南
 
-## 功能特色
-- **商品定價**：MV9 定位修改器 單台 NT$ 1,198。
-- **買家表單**：收集姓名、電話、收件地址、Email 與電子發票開立方式（會員載具 / 手機條碼 / 公司統編 / 愛心碼）。
-- **嚴格付款成立機制**：送出表單僅建立 `PENDING` 暫存單；唯有綠界科技 `ReturnURL` 通知 `RtnCode=1` 且 `CheckMacValue` 驗簽通過後，訂單才會轉為 `PAID`（正式成立）。
-- **自動開發票與寄信**：訂單成立當下自動呼叫綠界 B2C 電子發票 API（`B2CInvoice/Issue`，AES-128-CBC 加密）開立發票，並透過 SMTP 寄送「訂單成立通知信」至買家信箱。
+此版本專為 **Cloudflare Workers** 打造，使用原生的 Web Crypto API 實作綠界 AIO CheckMacValue 與 B2C 電子發票 AES-128-CBC 加密，**零外部套件相依、不會休眠、部署只需十幾秒**！
 
-## 本機與雲端部署步驟
-1. 安裝套件：
-   ```bash
-   npm install
-   ```
-2. 複製 `.env.example` 為 `.env` 並填入您的綠界金鑰與 SMTP 寄信帳號：
-   ```bash
-   cp .env.example .env
-   ```
-3. 啟動伺服器：
-   ```bash
-   npm start
-   ```
-4. 若部署於 Render / Zeabur / Railway，請將 `BASE_URL` 設為您的正式 `https://` 網址，綠界才可成功呼叫 `/api/ecpay/return`。
-5. 官方測試信用卡號：`4311-9522-2222-2222`（安全碼任意三碼、有效期限任意未來月年、3D 驗證碼 `1234`）。
+## 快速部署步驟（Cloudflare Dashboard + GitHub）
+1. 將本資料夾內容上傳至 GitHub 儲存庫。
+2. 進入 [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Compute (Workers) → Workers & Pages → Create → Import a repository**，選擇該 GitHub 儲存庫。
+3. **Build command** 留空（或填 `npx wrangler deploy` 視介面設定，預設 Deploy command 為 `npx wrangler deploy`）。
+4. 部署完成取得 `https://mv9-ecpay-shop.xxx.workers.dev` 網址後，到 Worker 的 **Settings → Variables and Secrets** 新增：
+   - `BASE_URL` = 您的 `workers.dev` 網址
+   - `ECPAY_ENV` = `stage`（測試）或 `prod`（正式）
+   - `ECPAY_MERCHANT_ID`、`ECPAY_HASH_KEY`、`ECPAY_HASH_IV`
+   - `ECPAY_INV_MERCHANT_ID`、`ECPAY_INV_HASH_KEY`、`ECPAY_INV_HASH_IV`
+   - （選填寄信）`RESEND_API_KEY`（至 [Resend](https://resend.com/) 免費註冊取得）與 `MAIL_FROM`
+5. （建議）到 **Storage & Databases → KV** 建立一個名為 `ORDERS_KV` 的 Namespace，並在 Worker 的 **Settings → Bindings** 綁定變數名稱 `ORDERS_KV`，訂單紀錄即可永久保存！

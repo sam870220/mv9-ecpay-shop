@@ -1,0 +1,12 @@
+name = "mv9-ecpay-shop"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# 建議於 Cloudflare 後台建立 KV Namespace 並填入 id，讓訂單紀錄永久保存
+# [[kv_namespaces]]
+# binding = "ORDERS_KV"
+# id = "your-kv-namespace-id"

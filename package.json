@@ -1,14 +1,13 @@
 {
-  "name": "mv9-ecpay-shop",
+  "name": "mv9-ecpay-cf-worker",
   "version": "1.0.0",
-  "description": "牛牛科技工作室 MV9 定位修改器官網 — 綠界科技 AIO 金流、B2C 電子發票自動開立與買方訂單成立 Email 通知",
-  "main": "server.js",
+  "private": true,
+  "description": "牛牛科技工作室 MV9 定位修改器 — Cloudflare Workers 版（綠界 AIO 金流 + B2C 電子發票 + Resend 寄信）",
   "scripts": {
-    "start": "node server.js"
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
   },
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.21.1",
-    "nodemailer": "^6.9.16"
+  "devDependencies": {
+    "wrangler": "^3.90.0"
   }
 }
